@@ -12,7 +12,7 @@ Reasons:
 1. No more flicker whenever you are starting, closing or Alt-Tabing the game.
 2. Same display latency as fullscreen exclusive.
 3. Works with Auto HDR and G-sync/Freesync. 
-4. The game will render as whatever your desktop resolution is. So you can get the benefit of your 5K/8K display or DLDSR.
+4. The game will render as whatever your desktop resolution is. So you can  benefit from your 5K/8K display or DLDSR.
 ## OK, I'm convinced. How do I use this?
 You could use [DivaModManager](https://github.com/TekkaGB/DivaModManager) to download and enable this mod.
 This mod works by convert the window of a windowed game into a borderless one. And it will only happend once when the game is starting. It means you have to go to the in-game settings and switch to windowed mode then restart the game to make it work. Also if you switched to borderless or fullscreen in game then switch back, the mod won't take effect until you restart the game. 
