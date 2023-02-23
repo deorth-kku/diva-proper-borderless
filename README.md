@@ -7,7 +7,7 @@ However, if you start the game in windowed mode, and then go to settings and swi
 ## Why not use fullscreen exclusive then?
 Also I'm using multi-monitor. I often switch to a window on another monitor and do something else without closing the game, like a lot.
 ## So why should I use this?
-Even if you are not a multi-monitor user like me, I suggest you turn on "optimizations for windowed games" and use this if you are using Windows 11.  
+Even if you are not a multi-monitor user like me, I suggest you turn on "[optimizations for windowed games](https://support.microsoft.com/en-us/windows/optimizations-for-windowed-games-in-windows-11-3f006843-2c7e-4ed0-9a5e-f9389e535952)" and use this if you are using Windows 11.  
 Reasons:
 1. No more flicker whenever you are starting, closing or Alt-Tabing the game.
 2. Same display latency as fullscreen exclusive.
