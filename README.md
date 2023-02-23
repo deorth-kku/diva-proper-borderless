@@ -16,7 +16,7 @@ Reasons:
 ## OK, I'm convinced. How do I use this?
 You could use [DivaModManager](https://github.com/TekkaGB/DivaModManager) to download and enable this mod.
 This mod works by convert the window of a windowed game into a borderless one. And it will only happend once when the game is starting. It means you have to go to the in-game settings and switch to windowed mode then restart the game to make it work. Also if you switched to borderless or fullscreen in game then switch back, the mod won't take effect until you restart the game. 
-## I'd to display the game on a monitor which is not the main monitor.
+## I'd to display the game on a monitor which is not the primary monitor.
 I will do this once I figured out how to read args from config.toml. 
 ## Compile?
 `CGO_ENABLED=1 go build -buildmode=c-shared -ldflags "-s -w" -o borderless.dll mod.go`
