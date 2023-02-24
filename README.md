@@ -18,7 +18,18 @@ You could use [DivaModManager](https://github.com/TekkaGB/DivaModManager) to dow
 This mod works by convert the window of a windowed game into a borderless one. And it will only happend once when the game is starting. 
 **It means you have to go to the in-game settings and switch to windowed mode then restart the game to make it work.**  
 Also if you switched to borderless or fullscreen in game then switch back, the mod won't take effect until you restart the game. 
-## I'd to display the game on a monitor which is not the primary monitor.
-I will do this once I figured out how to read args from config.toml. 
-## Compile?
+## I'd like to display the game on a monitor which is not the primary monitor.
+Use these properties in config.toml to place the window wherever and whatever size you want. 
+```
+PositionX = 0
+PositionY = 0
+Width = 0
+Height = 0
+```
+`(0,0)` is the top-left corner of your primary monitor. For X, positive direction is right. For Y, positive direction is down.
+If both `Width` and `Height` is set to 0, the windows will be the same size as your primary monitor.
+**Don't forget to set "Override high DPI Scaling behaviour" to "System" for "DivaMegaMix.exe"!**
+
+
+## Compilation
 `CGO_ENABLED=1 go build -buildmode=c-shared -ldflags "-s -w" -o borderless.dll mod.go`
