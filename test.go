@@ -7,9 +7,12 @@ import (
 )
 
 func main() {
-	pid := 5240
-	hwnd, _ := win32tools.FindWindowByPid(pid)
-	fmt.Printf("%d\n", hwnd)
-	win32tools.SetBorderless(hwnd, 0, 0, 1920, 1080)
+	name := "初音ミク Project DIVA Mega39's+"
+	hwnd, _ := win32tools.FindWindow(name)
+	if win32tools.IfWindowBorderless(hwnd) {
+		fmt.Printf("window %s is borderless\n", name)
+	} else {
+		fmt.Printf("window %s is not borderless\n", name)
+	}
 
 }

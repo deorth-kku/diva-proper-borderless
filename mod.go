@@ -16,18 +16,31 @@ type Config struct {
 	PositionY int32
 	Width     int32
 	Height    int32
+	OnResize  bool
 }
 
 //export Init
 func Init() {
 	dir, _ := os.Getwd()
 	conf_path := path.Join(dir, "config.toml")
-	go run(conf_path)
+	go run(conf_path, false)
 }
-func run(conf_path string) {
+
+//export OnResize
+func OnResize() {
+	dir, _ := os.Getwd()
+	conf_path := path.Join(dir, "config.toml")
+	go run(conf_path, true)
+}
+
+func run(conf_path string, is_resize bool) {
 	pid := os.Getpid()
 	var conf Config
 	toml.DecodeFile(conf_path, &conf)
+
+	if is_resize && !conf.OnResize {
+		return
+	}
 
 	var hwnd syscall.Handle
 	var i uint8
@@ -41,7 +54,9 @@ func run(conf_path string) {
 		}
 
 	}
-	win32tools.SetBorderless(hwnd, conf.PositionX, conf.PositionY, conf.Width, conf.Height)
+	if !win32tools.IfWindowBorderless(hwnd) {
+		win32tools.SetBorderless(hwnd, conf.PositionX, conf.PositionY, conf.Width, conf.Height)
+	}
 }
 
 func main() {
