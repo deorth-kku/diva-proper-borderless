@@ -43,5 +43,5 @@ func GetWindowInfo(hwnd syscall.Handle, info *WINDOWINFO) int {
 func IfWindowBorderless(hwnd syscall.Handle) bool {
 	style := GetWindowLong(hwnd, GWL_STYLE)
 	ex_style := GetWindowLong(hwnd, GWL_EXSTYLE)
-	return (style >= WS_VISIBLE|WS_CLIPCHILDREN) && (ex_style == 0)
+	return (style&WS_VISIBLE == WS_VISIBLE) && (style&WS_CLIPCHILDREN == WS_CLIPCHILDREN) && (ex_style == 0)
 }
