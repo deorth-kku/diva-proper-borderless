@@ -14,8 +14,8 @@ Reasons:
 3. Works with Auto HDR and G-sync/Freesync. 
 4. The game will render as whatever your desktop resolution is. So you can  benefit from your 5K/8K display or DLDSR.
 ## OK, I'm convinced. How do I use this?
-You could use [DivaModManager](https://github.com/TekkaGB/DivaModManager) to download and enable this mod.
-After you enabled this mod, go to game setting to change the and switch to windowed mode (or so-called "With Frame").
+You could use [DivaModManager](https://github.com/TekkaGB/DivaModManager) to download and enable this mod.  
+After you enabled this mod, go to game setting to change the and switch to windowed mode (or so-called "With Frame").  
 If that doesn't work, change the resolution as well. Don't worry, the resolution setting in windowed mode doesn't matter anymore. It will always fit your screen.
 ## I'd like to display the game on a monitor which is not the primary monitor.
 Use these properties in config.toml to place the window wherever and whatever size you want. 
