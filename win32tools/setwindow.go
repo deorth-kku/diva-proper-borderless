@@ -1,20 +1,15 @@
 package win32tools
 
 import (
-	"fmt"
 	"syscall"
-	"unsafe"
 )
 
 var (
-	user32                       = syscall.MustLoadDLL("user32.dll")
-	procEnumWindows              = user32.MustFindProc("EnumWindows")
-	procGetWindowTextW           = user32.MustFindProc("GetWindowTextW")
-	procGetWindowThreadProcessId = user32.MustFindProc("GetWindowThreadProcessId")
-	procIsWindowVisible          = user32.MustFindProc("IsWindowVisible")
-	procSetWindowLongW           = user32.MustFindProc("SetWindowLongW")
-	procMoveWindow               = user32.MustFindProc("MoveWindow")
-	procSetWindowPos             = user32.MustFindProc("SetWindowPos")
+	user32             = syscall.MustLoadDLL("user32.dll")
+	procEnumWindows    = user32.MustFindProc("EnumWindows")
+	procSetWindowLongW = user32.MustFindProc("SetWindowLongW")
+	procMoveWindow     = user32.MustFindProc("MoveWindow")
+	procSetWindowPos   = user32.MustFindProc("SetWindowPos")
 )
 
 const (
@@ -91,37 +86,6 @@ func EnumWindows(enumFunc uintptr, lparam uintptr) (err error) {
 	return
 }
 
-func GetWindowText(hwnd syscall.Handle, str *uint16, maxCount int32) (len int32, err error) {
-	r0, _, e1 := syscall.SyscallN(procGetWindowTextW.Addr(), uintptr(hwnd), uintptr(unsafe.Pointer(str)), uintptr(maxCount))
-	len = int32(r0)
-	if len == 0 {
-		if e1 != 0 {
-			err = error(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-func GetWindowPid(hwnd syscall.Handle, pid *int) (len int32, err error) {
-	r0, _, e1 := syscall.SyscallN(procGetWindowThreadProcessId.Addr(), uintptr(hwnd), uintptr(unsafe.Pointer(pid)))
-	len = int32(r0)
-	if len == 0 {
-		if e1 != 0 {
-			err = error(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func IsWindowVisible(hwnd syscall.Handle) bool {
-	ret, _, _ := syscall.SyscallN(procIsWindowVisible.Addr(), uintptr(hwnd))
-
-	return ret != 0
-}
-
 func SetWindowLong(hwnd syscall.Handle, index, value int32) int32 {
 	ret, _, _ := syscall.SyscallN(procSetWindowLongW.Addr(),
 		uintptr(hwnd),
@@ -182,53 +146,4 @@ func SetBorderless(hwnd syscall.Handle, XPos, YPos, HRes, VRes int32) bool {
 	d := SetWindowPos(hwnd, hwnd0, XPos, YPos, HRes, VRes, SWP_FRAMECHANGED|SWP_NOZORDER|SWP_NOOWNERZORDER)
 	return a && b && c && d
 
-}
-
-func FindWindow(title string) (syscall.Handle, error) {
-	var hwnd syscall.Handle
-	cb := syscall.NewCallback(func(h syscall.Handle, p uintptr) uintptr {
-		b := make([]uint16, 200)
-		_, err := GetWindowText(h, &b[0], int32(len(b)))
-		if err != nil {
-			// ignore the error
-			return 1 // continue enumeration
-		}
-		if syscall.UTF16ToString(b) == title {
-			// note the window
-			hwnd = h
-			return 0 // stop enumeration
-		}
-		return 1 // continue enumeration
-	})
-	EnumWindows(cb, 0)
-	if hwnd == 0 {
-		return 0, fmt.Errorf("no window with title '%s' found", title)
-	}
-	return hwnd, nil
-}
-
-func FindWindowByPid(pid int) (syscall.Handle, error) {
-	var hwnd syscall.Handle
-	cb := syscall.NewCallback(func(h syscall.Handle, p uintptr) uintptr {
-		if !IsWindowVisible(h) {
-			return 1
-		}
-		var b int
-		_, err := GetWindowPid(h, &b)
-		if err != nil {
-			// ignore the error
-			return 1 // continue enumeration
-		}
-		if b == pid {
-			// note the window
-			hwnd = h
-			return 0 // stop enumeration
-		}
-		return 1 // continue enumeration
-	})
-	EnumWindows(cb, 0)
-	if hwnd == 0 {
-		return 0, fmt.Errorf("no window with pid '%d' found", pid)
-	}
-	return hwnd, nil
 }
