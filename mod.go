@@ -19,17 +19,17 @@ type Config struct {
 	OnResize  bool
 }
 
+var conf_path string
+
 //export Init
 func Init() {
 	dir, _ := os.Getwd()
-	conf_path := path.Join(dir, "config.toml")
+	conf_path = path.Join(dir, "config.toml")
 	go run(conf_path, false)
 }
 
 //export OnResize
 func OnResize() {
-	dir, _ := os.Getwd()
-	conf_path := path.Join(dir, "config.toml")
 	go run(conf_path, true)
 }
 
