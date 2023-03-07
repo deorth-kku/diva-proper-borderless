@@ -4,13 +4,13 @@ import "C"
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
-	"github.com/deorth-kku/diva-proper-borderless/win32tools"
 	"os"
 	"path"
-	"strings"
 	"syscall"
 	"time"
+
+	"github.com/BurntSushi/toml"
+	"github.com/deorth-kku/diva-proper-borderless/win32tools"
 )
 
 type Config struct {
@@ -50,10 +50,19 @@ func run(is_resize bool) {
 	// only search for hwnd when global hwnd is not set
 	if int(hwnd) == 0 {
 		pid := os.Getpid()
+		h_con, err := win32tools.GetConsoleWindow()
+		if err == nil {
+			con_title, err := win32tools.GetWindowText(h_con, 200)
+			if err == nil {
+				fmt.Printf("[Proper Borderless] find console window %d, title: %s\n", h_con, con_title)
+			} else {
+				fmt.Printf("[Proper Borderless] unable to get title for console window %d: %s\n", h_con, err)
+			}
+		}
 		var i int8
 		fmt.Printf("[Proper Borderless] searching windows for pid %d\n", pid)
 		for i < 100 {
-			hwnd = findDivaHwnd(pid)
+			hwnd = findDivaHwnd(pid, h_con)
 			if int(hwnd) == 0 {
 				time.Sleep(1000 * 1000 * 100) //sleep 0.1s
 				i++
@@ -70,25 +79,24 @@ func run(is_resize bool) {
 	}
 }
 
-func findDivaHwnd(pid int) (result syscall.Handle) {
+func findDivaHwnd(pid int, console_hwnd syscall.Handle) (result syscall.Handle) {
 	hwnd_list, err := win32tools.FindWindowByPid(pid)
 	if err != nil {
 		return
 	}
 	for _, h := range hwnd_list {
+		if h == console_hwnd {
+			continue
+		}
 		title, err := win32tools.GetWindowText(h, 200)
 		if err != nil {
 			fmt.Printf("[Proper Borderless] get title for %d failed, cause: %s\n", int(h), err)
 			return
 		}
-		// search for window that title ends with "+". I know this is stupid but I cannot think of anything else
-		if strings.HasSuffix(title, "+") {
-			fmt.Printf("[Proper Borderless] using hwnd %d, title: %s\n", int(h), title)
-			result = h
-			return
-		} else {
-			fmt.Printf("[Proper Borderless] skipping hwnd %d, title: %s\n", int(h), title)
-		}
+		fmt.Printf("[Proper Borderless] using hwnd %d, title: %s\n", int(h), title)
+		result = h
+		return
+
 	}
 	return
 }

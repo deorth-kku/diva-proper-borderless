@@ -12,6 +12,8 @@ var (
 	procGetWindowTextW           = user32.MustFindProc("GetWindowTextW")
 	procGetWindowThreadProcessId = user32.MustFindProc("GetWindowThreadProcessId")
 	procIsWindowVisible          = user32.MustFindProc("IsWindowVisible")
+	kernel32                     = syscall.MustLoadDLL("kernel32.dll")
+	procGetConsoleWindow         = kernel32.MustFindProc("GetConsoleWindow")
 )
 
 type DWORD = uint32
@@ -68,6 +70,15 @@ func GetWindowThreadProcessId(hwnd syscall.Handle) (pid int, err error) {
 			err = syscall.EINVAL
 		}
 	}
+	return
+}
+
+func GetConsoleWindow() (hwnd syscall.Handle, err error) {
+	h, _, e1 := syscall.SyscallN(procGetConsoleWindow.Addr())
+	if e1 != 0 {
+		err = error(e1)
+	}
+	hwnd = syscall.Handle(h)
 	return
 }
 
