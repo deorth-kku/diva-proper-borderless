@@ -21,8 +21,9 @@ type Config struct {
 	OnResize  bool
 }
 
+const interval = 1000 * 1000 * 100
+
 var conf_path string
-var pid int
 var hwnd syscall.Handle
 
 //export Init
@@ -64,7 +65,7 @@ func run(is_resize bool) {
 		for i < 100 {
 			hwnd = findDivaHwnd(pid, h_con)
 			if int(hwnd) == 0 {
-				time.Sleep(1000 * 1000 * 100) //sleep 0.1s
+				time.Sleep(interval) //sleep 0.1s
 				i++
 			} else {
 				break
