@@ -1,0 +1,15 @@
+enabled = true
+name = "Proper Borderless"
+description = "A workaround for SEGA's laggy borderless fullscreen implementation."
+version = "1.2.1"
+date = "09.03.2023"
+author = "deorth"
+
+PositionX = 0
+PositionY = 0
+Width = 0
+Height = 0
+OnResize = true
+include = ["."]
+dll = ["borderless.dll"]
+
