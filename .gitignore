@@ -17,3 +17,6 @@
 
 # cgo
 *.h
+
+# build
+build.sh
