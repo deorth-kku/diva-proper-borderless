@@ -21,7 +21,7 @@ type Config struct {
 	OnResize  bool
 }
 
-func console_printf(t string, args ...interface{}) {
+func console_printf(t string, args ...any) {
 	t = "[Proper Borderless] " + t + "\n"
 	if len(args) == 0 {
 		fmt.Print(t)
@@ -65,7 +65,7 @@ func run(is_resize bool) {
 		if err == nil {
 			con_title, err := win32tools.GetWindowText(h_con, 200)
 			if err == nil {
-				console_printf("find console window %d, title: %s", h_con, con_title)
+				console_printf("found console window %d, title: %s", h_con, con_title)
 			} else {
 				console_printf("unable to get title for console window %d: %s", h_con, err)
 			}
@@ -78,6 +78,7 @@ func run(is_resize bool) {
 				time.Sleep(interval) //sleep 0.1s
 				i++
 			} else {
+				console_printf("found game window after %d retries", i)
 				break
 			}
 		}
