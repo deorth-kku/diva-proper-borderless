@@ -47,7 +47,8 @@ func OnResize() {
 	go run(true)
 }
 
-const interval = 1000 * 1000 * 100
+const interval = 100 * time.Millisecond
+const max_retries = 100
 
 func run(is_resize bool) {
 	var conf Config
@@ -72,7 +73,7 @@ func run(is_resize bool) {
 		}
 		var i int8
 		console_printf("searching windows for pid %d", pid)
-		for i < 100 {
+		for i < max_retries {
 			hwnd = findDivaHwnd(pid, h_con)
 			if int(hwnd) == 0 {
 				time.Sleep(interval) //sleep 0.1s
