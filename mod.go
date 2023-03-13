@@ -48,7 +48,7 @@ func OnResize() {
 }
 
 const interval = 100 * time.Millisecond
-const max_retries = 100
+const max_retries int8 = 100
 
 func run(is_resize bool) {
 	var conf Config
@@ -71,13 +71,11 @@ func run(is_resize bool) {
 				console_printf("unable to get title for console window %d: %s", h_con, err)
 			}
 		}
-		var i int8
 		console_printf("searching windows for pid %d", pid)
-		for i < max_retries {
+		for i := int8(0); i < max_retries; i++ {
 			hwnd = findDivaHwnd(pid, h_con)
 			if int(hwnd) == 0 {
 				time.Sleep(interval) //sleep 0.1s
-				i++
 			} else {
 				console_printf("found game window after %d retries", i)
 				break
